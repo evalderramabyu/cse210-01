@@ -21,6 +21,7 @@ def main():
         current_player = next_player(current_player)
 
     display_grid(grid_data)
+    print(game_over_messages(grid_data, current_player))
     print("Good game. Thanks for playing!")
 
 def next_player(player):
@@ -44,22 +45,33 @@ def open_game(grid_data):
         if grid_data[i] != "x" and grid_data[i] != "o":
             full_selection = False
 
-    has_a_line = (grid_data[0] == grid_data[1] == grid_data[2] or
-                  grid_data[3] == grid_data[4] == grid_data[5] or
-                  grid_data[6] == grid_data[7] == grid_data[8] or
-                  grid_data[0] == grid_data[3] == grid_data[6] or
-                  grid_data[1] == grid_data[4] == grid_data[7] or
-                  grid_data[2] == grid_data[5] == grid_data[8] or
-                  grid_data[0] == grid_data[4] == grid_data[8] or
-                  grid_data[2] == grid_data[4] == grid_data[6])
+    has_winner = has_a_line(grid_data)
 
-    return full_selection == False and has_a_line == False
+    return full_selection == False and has_winner == False
+
+def has_a_line(grid_data):
+    return (grid_data[0] == grid_data[1] == grid_data[2] or
+            grid_data[3] == grid_data[4] == grid_data[5] or
+            grid_data[6] == grid_data[7] == grid_data[8] or
+            grid_data[0] == grid_data[3] == grid_data[6] or
+            grid_data[1] == grid_data[4] == grid_data[7] or
+            grid_data[2] == grid_data[5] == grid_data[8] or
+            grid_data[0] == grid_data[4] == grid_data[8] or
+            grid_data[2] == grid_data[4] == grid_data[6])
 
 def get_color(player):
     if player == "x":
         return "blue"
     else:
         return "green"
+
+def game_over_messages(grid_data, player):
+    player = next_player(player)
+    color = get_color(player)
+    if has_a_line(grid_data) == True:
+        return colored(f"Player \"{player}\" won the game.", color)
+    else:
+        return "The game ended in a draw."
 
 if __name__ == "__main__":
     main()
